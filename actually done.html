@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FBF6EA">
+<title>Sunday School Registration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FBF6EA;
+    --card: #FFFFFF;
+    --gold: #E8A33D;
+    --gold-deep: #C97F1E;
+    --blue: #6B9AC4;
+    --navy: #2B3A4A;
+    --navy-soft: #5A6B7A;
+    --rust: #C1553D;
+    --green: #5B8C5A;
+    --line: #EAE0CC;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    background: var(--cream);
+    background-image:
+      radial-gradient(circle at 10% -5%, rgba(232,163,61,0.16), transparent 40%),
+      radial-gradient(circle at 100% 0%, rgba(107,154,196,0.14), transparent 45%);
+    font-family: 'Inter', sans-serif;
+    color: var(--navy);
+    min-height: 100vh;
+    padding: 0 0 60px 0;
+  }
+
+  header {
+    padding: 44px 20px 28px;
+    text-align: center;
+  }
+
+  .sunburst {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 14px;
+    display: block;
+  }
+
+  h1 {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 6vw, 40px);
+    margin: 0 0 8px;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+  }
+
+  header p {
+    margin: 0 auto;
+    color: var(--navy-soft);
+    font-size: 16px;
+    max-width: 440px;
+    line-height: 1.5;
+  }
+
+  form {
+    max-width: 560px;
+    margin: 32px auto 0;
+    padding: 0 18px;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    padding: 26px 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(43,58,74,0.04);
+  }
+
+  .card-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .badge {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    background: var(--gold);
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .child-card .badge { background: var(--blue); }
+
+  .card-label h2 {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    margin: 0;
+    color: var(--navy);
+  }
+
+  .field { margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy-soft);
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+  }
+
+  .required::after {
+    content: " *";
+    color: var(--rust);
+  }
+
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 13px 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--line);
+    background: #FEFCF7;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: var(--navy);
+    outline: none;
+    transition: border-color 0.15s ease;
+    min-height: 46px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%235A6B7A' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--gold);
+  }
+
+  input.invalid, textarea.invalid, select.invalid {
+    border-color: var(--rust);
+    background: #FDF3F1;
+  }
+
+  .error-message {
+    display: none;
+    color: var(--rust);
+    font-size: 12.5px;
+    font-weight: 500;
+    margin-top: 5px;
+  }
+
+  .field.has-error .error-message { display: block; }
+
+  textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 480px) {
+    .row { grid-template-columns: 1fr; }
+    header { padding: 32px 16px 22px; }
+    form { padding: 0 14px; }
+    .card { padding: 20px 16px; }
+    h1 { font-size: 26px; }
+  }
+
+  .child-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .remove-child {
+    background: none;
+    border: none;
+    color: var(--rust);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 10px 12px;
+    min-height: 40px;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .remove-child:hover { background: rgba(193,85,61,0.08); }
+
+  #children-container .child-card {
+    border-left: 3px solid var(--blue);
+  }
+
+  .add-child-btn {
+    width: 100%;
+    padding: 15px;
+    min-height: 50px;
+    border-radius: 12px;
+    border: 1.5px dashed var(--blue);
+    background: rgba(107,154,196,0.06);
+    color: var(--blue);
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .add-child-btn:hover { background: rgba(107,154,196,0.13); }
+
+  .submit-btn {
+    width: 100%;
+    padding: 17px;
+    min-height: 54px;
+    border-radius: 12px;
+    border: none;
+    background: var(--gold-deep);
+    color: #fff;
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    cursor: pointer;
+    box-shadow: 0 3px 0 #a3690f;
+    transition: transform 0.08s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .submit-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #a3690f;
+  }
+
+  .note {
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--navy-soft);
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+
+  .waiver-text {
+    max-height: 220px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 14px 16px;
+    background: #FEFCF7;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--navy-soft);
+  }
+
+  .waiver-text p {
+    margin: 0 0 12px;
+  }
+
+  .waiver-text p:last-child {
+    margin-bottom: 0;
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .submit-error {
+    display: none;
+    background: #FDF3F1;
+    border: 1.5px solid var(--rust);
+    color: var(--rust);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    font-weight: 500;
+    margin-top: 14px;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .submit-error.visible { display: block; }
+
+  #confirmation {
+    display: none;
+    max-width: 480px;
+    margin: 60px auto;
+    text-align: center;
+    padding: 0 24px;
+  }
+
+  #confirmation .check {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+
+  #confirmation h2 {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 26px;
+    margin: 0 0 10px;
+  }
+
+  #confirmation p {
+    color: var(--navy-soft);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <svg class="sunburst" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="32" r="12" fill="#E8A33D"/>
+    <g stroke="#E8A33D" stroke-width="3.5" stroke-linecap="round">
+      <line x1="32" y1="4" x2="32" y2="12"/>
+      <line x1="32" y1="52" x2="32" y2="60"/>
+      <line x1="4" y1="32" x2="12" y2="32"/>
+      <line x1="52" y1="32" x2="60" y2="32"/>
+      <line x1="12.7" y1="12.7" x2="18.3" y2="18.3"/>
+      <line x1="45.7" y1="45.7" x2="51.3" y2="51.3"/>
+      <line x1="12.7" y1="51.3" x2="18.3" y2="45.7"/>
+      <line x1="45.7" y1="18.3" x2="51.3" y2="12.7"/>
+    </g>
+  </svg>
+  <h1>Sunday School Registration</h1>
+  <p>Register your family once — add every child in just a few extra taps.</p>
+</header>
+
+<form id="reg-form" novalidate>
+  <div class="card">
+    <div class="card-label">
+      <div class="badge">P</div>
+      <h2>Parent / Guardian Information</h2>
+    </div>
+    <div class="field" id="field-parent-name">
+      <label class="required" for="parent-name">Full name</label>
+      <input type="text" id="parent-name" autocomplete="name" autocapitalize="words">
+      <div class="error-message">Please enter your first and last name.</div>
+    </div>
+    <div class="row">
+      <div class="field" id="field-parent-phone">
+        <label class="required" for="parent-phone">Phone number</label>
+        <input type="tel" id="parent-phone" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
+        <div class="error-message">Please enter a valid 10-digit phone number.</div>
+      </div>
+      <div class="field" id="field-parent-email">
+        <label class="required" for="parent-email">Email address</label>
+        <input type="email" id="parent-email" placeholder="name@example.com" autocomplete="email" inputmode="email" autocapitalize="off">
+        <div class="error-message">Please enter a valid email address.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="children-container"></div>
+
+  <button type="button" class="add-child-btn" id="add-child-btn">+ Add another child</button>
+
+  <div class="card">
+    <div class="card-label">
+      <div class="badge" style="background: var(--rust);">!</div>
+      <h2>Waiver &amp; Consent</h2>
+    </div>
+    <div class="waiver-text">
+      <p>We/I the Parents or Guardians named above authorize the above named Student to participate Elim Romanian Pentecostal Church Sunday School onsite and offsite,</p>
+      <p>We/I understand that some risk may be involved with these activities or related transportation and release Elim Romanian Pentecostal church Sunday School department, and their staff, volunteers, trustees, directors, corporation members and management from any loss, personal injury, accident, misfortune, or damage to the above named Student and/or his/her property, with the understanding that reasonable precautions shall be taken to ensure the health and safety of the Student</p>
+      <p>We/I authorize the above named Student to be medically treated as determined appropriate by Elim Romanian Pentecostal Church Sunday School staff or volunteers and authorize the Student to be transported to the nearest suitable medical or hospital facility in the event of an emergency situation that is not treatable on the scene,</p>
+      <p>We/I give permission to Elim Romanian Pentecostal Church Sunday School Department Staff and/or Volunteers to contact me regarding the above names Student via phone, text, email and the church's communication software,</p>
+      <p>We/I authorize the above named Student to be transported to and from events by transportation services utilized by Elim Romanian Pentecostal Church Sunday school department (e.g., charter buses or personal vehicles),</p>
+      <p>We/I understand that individual and group photos and video may be taken of the above named Student during Elim Romanian Pentecostal Church Sunday school activities and grant permission for the reasonable use of brochures/promo materials, church website and newsletters.</p>
+      <p>We/I have read, understood and agree with the above and sign it to cover all Elim Romanian Pentecostal Church Sunday School activities for the program year effective as stated on this form.</p>
+    </div>
+    <div class="field" id="field-signature" style="margin-top:18px;">
+      <label class="required" for="signature">Signature (type your full name)</label>
+      <input type="text" id="signature" placeholder="Type your full legal name as your signature" autocomplete="off" autocapitalize="words">
+      <div class="error-message">Please type your full name to sign the waiver.</div>
+    </div>
+  </div>
+
+  <button type="submit" class="submit-btn">Submit Registration</button>
+  <div id="submit-error" class="submit-error"></div>
+  <p class="note">This is a preview form — submissions aren't being saved anywhere yet.</p>
+</form>
+
+<div id="confirmation">
+  <div class="check">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+      <path d="M4 12L9.5 17.5L20 6" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <h2>You're registered!</h2>
+  <p>Thanks for signing up. We've got your family's information on file for Sunday School.</p>
+</div>
+
+<script>
+  let childCount = 0;
+
+  function addChild() {
+    childCount++;
+    const container = document.getElementById('children-container');
+    const div = document.createElement('div');
+    div.className = 'card child-card';
+    div.dataset.childId = childCount;
+    div.innerHTML = `
+      <div class="card-label child-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="badge">${childCount}</div>
+          <h2>Child ${childCount} Information</h2>
+        </div>
+        ${childCount > 1 ? '<button type="button" class="remove-child">Remove</button>' : ''}
+      </div>
+      <div class="field child-name-field">
+        <label class="required">Full name</label>
+        <input type="text" class="child-name" autocomplete="off" autocapitalize="words">
+        <div class="error-message">Please enter the child's first and last name.</div>
+      </div>
+      <div class="row">
+        <div class="field child-dob-field">
+          <label class="required">Date of birth</label>
+          <input type="date" class="child-dob">
+          <div class="error-message">Please enter a valid date of birth (not in the future).</div>
+        </div>
+        <div class="field child-grade-field">
+          <label class="required">Grade</label>
+          <select class="child-grade">
+            <option value="" disabled selected>Select grade</option>
+            <option>Pre-K (must be potty trained for Sunday School)</option>
+            <option>Kindergarten</option>
+            <option>1st grade</option>
+            <option>2nd grade</option>
+            <option>3rd grade</option>
+            <option>4th grade</option>
+            <option>5th grade</option>
+            <option>6th grade</option>
+            <option>7th grade</option>
+          </select>
+          <div class="error-message">Please select a grade.</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Allergies or medical notes</label>
+        <textarea class="child-allergies" placeholder="List any allergies, conditions, or things a teacher should know"></textarea>
+      </div>
+    `;
+    container.appendChild(div);
+
+    const removeBtn = div.querySelector('.remove-child');
+    if (removeBtn) {
+      removeBtn.addEventListener('click', () => {
+        div.remove();
+        renumberChildren();
+      });
+    }
+  }
+
+  function renumberChildren() {
+    const cards = document.querySelectorAll('.child-card');
+    cards.forEach((card, i) => {
+      const num = i + 1;
+      card.querySelector('.badge').textContent = num;
+      card.querySelector('h2').textContent = `Child ${num} Information`;
+    });
+    childCount = cards.length;
+  }
+
+  document.getElementById('add-child-btn').addEventListener('click', addChild);
+
+  // Start with one child section
+  addChild();
+
+  // ---- Validation helpers ----
+
+  function setError(fieldEl, inputEl, show) {
+    if (show) {
+      fieldEl.classList.add('has-error');
+      inputEl.classList.add('invalid');
+    } else {
+      fieldEl.classList.remove('has-error');
+      inputEl.classList.remove('invalid');
+    }
+  }
+
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+  }
+
+  function isValidFullName(value) {
+    const parts = value.trim().split(/\s+/).filter(Boolean);
+    return parts.length >= 2;
+  }
+
+  function digitsOnly(value) {
+    return value.replace(/\D/g, '');
+  }
+
+  function isValidPhone(value) {
+    const digits = digitsOnly(value);
+    // Accept 10-digit US numbers, optionally with a leading 1 (11 digits)
+    return digits.length === 10 || (digits.length === 11 && digits.startsWith('1'));
+  }
+
+  function isValidPastDate(value) {
+    if (!value) return false;
+    const entered = new Date(value + 'T00:00:00');
+    if (isNaN(entered.getTime())) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return entered <= today;
+  }
+
+  function validateForm() {
+    let valid = true;
+
+    const parentNameField = document.getElementById('field-parent-name');
+    const parentNameInput = document.getElementById('parent-name');
+    const nameOk = isValidFullName(parentNameInput.value);
+    setError(parentNameField, parentNameInput, !nameOk);
+    if (!nameOk) valid = false;
+
+    const parentPhoneField = document.getElementById('field-parent-phone');
+    const parentPhoneInput = document.getElementById('parent-phone');
+    const phoneOk = isValidPhone(parentPhoneInput.value);
+    setError(parentPhoneField, parentPhoneInput, !phoneOk);
+    if (!phoneOk) valid = false;
+
+    const parentEmailField = document.getElementById('field-parent-email');
+    const parentEmailInput = document.getElementById('parent-email');
+    const emailOk = isValidEmail(parentEmailInput.value);
+    setError(parentEmailField, parentEmailInput, !emailOk);
+    if (!emailOk) valid = false;
+
+    const signatureField = document.getElementById('field-signature');
+    const signatureInput = document.getElementById('signature');
+    const signatureOk = signatureInput.value.trim().length > 0;
+    setError(signatureField, signatureInput, !signatureOk);
+    if (!signatureOk) valid = false;
+
+    document.querySelectorAll('.child-card').forEach(card => {
+      const nameField = card.querySelector('.child-name-field');
+      const nameInput = card.querySelector('.child-name');
+      const childNameOk = isValidFullName(nameInput.value);
+      setError(nameField, nameInput, !childNameOk);
+      if (!childNameOk) valid = false;
+
+      const dobField = card.querySelector('.child-dob-field');
+      const dobInput = card.querySelector('.child-dob');
+      const dobOk = isValidPastDate(dobInput.value);
+      setError(dobField, dobInput, !dobOk);
+      if (!dobOk) valid = false;
+
+      const gradeField = card.querySelector('.child-grade-field');
+      const gradeInput = card.querySelector('.child-grade');
+      const gradeOk = gradeInput.value.trim().length > 0;
+      setError(gradeField, gradeInput, !gradeOk);
+      if (!gradeOk) valid = false;
+    });
+
+    return valid;
+  }
+
+  // Clear an individual field's error as soon as it becomes valid again
+  document.addEventListener('input', function(e) {
+    const target = e.target;
+
+    if (target.id === 'parent-name' && isValidFullName(target.value)) {
+      setError(document.getElementById('field-parent-name'), target, false);
+    }
+    if (target.id === 'parent-phone' && isValidPhone(target.value)) {
+      setError(document.getElementById('field-parent-phone'), target, false);
+    }
+    if (target.id === 'parent-email' && isValidEmail(target.value)) {
+      setError(document.getElementById('field-parent-email'), target, false);
+    }
+    if (target.id === 'signature' && target.value.trim().length > 0) {
+      setError(document.getElementById('field-signature'), target, false);
+    }
+    if (target.classList.contains('child-name') && isValidFullName(target.value)) {
+      setError(target.closest('.field'), target, false);
+    }
+    if (target.classList.contains('child-dob') && isValidPastDate(target.value)) {
+      setError(target.closest('.field'), target, false);
+    }
+  });
+
+  document.addEventListener('change', function(e) {
+    const target = e.target;
+    if (target.classList.contains('child-grade') && target.value.trim().length > 0) {
+      setError(target.closest('.field'), target, false);
+    }
+  });
+
+  // Paste your Apps Script "Web app URL" here after deploying (see
+  // apps-script-code.gs for setup steps). Leave as-is to keep the
+  // form in preview mode (shows confirmation, doesn't save anywhere).
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwgTD6jt2gDWEPHecdEe5PpdIT4WgeHfiUgoQuDMloo_le8Rwo63HNIa-twpO5MCOYq/exec';
+
+  document.getElementById('reg-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      const firstError = document.querySelector('.has-error');
+      if (firstError) {
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
+
+    const submitBtn = document.querySelector('.submit-btn');
+    const errorBanner = document.getElementById('submit-error');
+    errorBanner.classList.remove('visible');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    const children = Array.from(document.querySelectorAll('.child-card')).map(card => ({
+      name: card.querySelector('.child-name').value,
+      dob: card.querySelector('.child-dob').value,
+      grade: card.querySelector('.child-grade').value,
+      allergies: card.querySelector('.child-allergies').value
+    }));
+
+    const payload = {
+      parentName: document.getElementById('parent-name').value,
+      parentPhone: document.getElementById('parent-phone').value,
+      parentEmail: document.getElementById('parent-email').value,
+      signature: document.getElementById('signature').value,
+      children: children
+    };
+
+    function showConfirmation() {
+      document.getElementById('reg-form').style.display = 'none';
+      document.getElementById('confirmation').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showSubmitError(message) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Registration';
+      errorBanner.textContent = message;
+      errorBanner.classList.add('visible');
+      errorBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    if (SCRIPT_URL === 'PASTE_YOUR_WEB_APP_URL_HERE') {
+      // Preview mode — no backend connected yet.
+      showConfirmation();
+      return;
+    }
+
+    // Note: no "mode: no-cors" here on purpose — that would hide the
+    // response entirely and we'd never know if the save actually failed.
+    // text/plain avoids triggering a CORS preflight that Apps Script
+    // doesn't handle.
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    })
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error('Server responded with an error.');
+        }
+        return response.json();
+      })
+      .then(function(result) {
+        if (result && result.result === 'success') {
+          showConfirmation();
+        } else {
+          showSubmitError('We couldn\'t save your registration (the server reported an error). Please try again, or contact the church office if this keeps happening.');
+        }
+      })
+      .catch(function() {
+        showSubmitError('We couldn\'t reach the registration server. Please check your connection and try again.');
+      });
+  });
+</script>
+
+</body>
+</html>
